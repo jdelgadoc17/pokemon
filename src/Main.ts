@@ -98,28 +98,23 @@ function flujoJuegoBot(pokemonbot: Pokemon, pokemon1: Pokemon): void {
 }
 
 function statsFinales(pokemon:Pokemon):void{
-    console.log(`${pokemon.getNombre()} | ${pokemon.getHpActual()}`)
+    console.log(`Nombre: ${pokemon.getNombre()} | Salud final: ${pokemon.getHpActual()}`)
 
 }
 
-function comprobarFin(pokemon1:Pokemon, pokemon_bot:Pokemon){
-
-    if(pokemon1.getHpActual()<=0){
-        console.log(`\n${pokemon1.getNombre()} HA GANADO EL COMBATE`);
-        statsFinales(pokemon1);
-        statsFinales(pokemon_bot);
-
-
-    }else if(pokemon_bot.getHpActual()<=0){
+function comprobarFin(pokemon1: Pokemon, pokemon_bot: Pokemon): boolean {
+    if (pokemon1.getHpActual() <= 0) {
         console.log(`\n${pokemon_bot.getNombre()} HA GANADO EL COMBATE`);
         statsFinales(pokemon_bot);
         statsFinales(pokemon1);
-
-
-
-
+        return true; 
+    } else if (pokemon_bot.getHpActual() <= 0) {
+        console.log(`\n${pokemon1.getNombre()} HA GANADO EL COMBATE`);
+        statsFinales(pokemon1);
+        statsFinales(pokemon_bot);
+        return true; 
     }
-
+    return false; 
 }
 
 
@@ -129,8 +124,9 @@ function main_game(){
 
     const pokemon1=creacionPokemon();
     const pokemonBot=creacionPokemon();
+    let juegoencurso:boolean=true;
 
-    while(pokemon1.getHpActual()>0 && pokemonBot.getHpActual()>0){
+    while(juegoencurso){
         console.log(`\nTURNO ${turnos}`)
         console.log("---------------------------")
     
@@ -141,7 +137,7 @@ function main_game(){
         flujoJuegoBot(pokemonBot, pokemon1);
         turnos++;
     
-        comprobarFin(pokemon1, pokemonBot);
+        juegoencurso = !comprobarFin(pokemon1, pokemonBot);
     
         
     

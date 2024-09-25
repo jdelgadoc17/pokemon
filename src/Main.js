@@ -83,22 +83,26 @@ function statsFinales(pokemon) {
 }
 function comprobarFin(pokemon1, pokemon_bot) {
     if (pokemon1.getHpActual() <= 0) {
-        console.log("\n".concat(pokemon1.getNombre(), " HA GANADO EL COMBATE"));
-        statsFinales(pokemon1);
-        statsFinales(pokemon_bot);
-    }
-    else if (pokemon_bot.getHpActual() <= 0) {
         console.log("\n".concat(pokemon_bot.getNombre(), " HA GANADO EL COMBATE"));
         statsFinales(pokemon_bot);
         statsFinales(pokemon1);
+        return true;
     }
+    else if (pokemon_bot.getHpActual() <= 0) {
+        console.log("\n".concat(pokemon1.getNombre(), " HA GANADO EL COMBATE"));
+        statsFinales(pokemon1);
+        statsFinales(pokemon_bot);
+        return true;
+    }
+    return false;
 }
 function main_game() {
     console.log("COMIENZA EL COMBATE");
     var turnos = 1;
     var pokemon1 = creacionPokemon();
     var pokemonBot = creacionPokemon();
-    while (pokemon1.getHpActual() > 0 && pokemonBot.getHpActual() > 0) {
+    var juegoencurso = true;
+    while (juegoencurso) {
         console.log("\nTURNO ".concat(turnos));
         console.log("---------------------------");
         pokemon1.toString();
@@ -106,7 +110,7 @@ function main_game() {
         flujoJuego(pokemon1, pokemonBot);
         flujoJuegoBot(pokemonBot, pokemon1);
         turnos++;
-        comprobarFin(pokemon1, pokemonBot);
+        juegoencurso = !comprobarFin(pokemon1, pokemonBot);
     }
 }
 //JUGAMOS
