@@ -18,18 +18,38 @@ const lista_movimientos: Move[] = [
     new Move("Puño Fuego", 82),
 ];
 
+const listaPokemon: Pokemon[] = [
+    new Pokemon("Pikachu", "Electrico", 350, 350, 100, 56),
+    new Pokemon("Charizard", "Fuego", 400, 400, 84, 78),
+    new Pokemon("Bulbasaur", "Planta", 300, 300, 49, 49),
+    new Pokemon("Squirtle", "Agua", 320, 320, 48, 65),
+    new Pokemon("Jigglypuff", "Normal", 270, 270, 45, 20),
+    new Pokemon("Gengar", "Fantasma", 290, 290, 65, 60),
+    new Pokemon("Mewtwo", "Psíquico", 450, 450, 110, 90),
+    new Pokemon("Gardevoir", "Psíquico", 340, 340, 65, 65),
+    new Pokemon("Machamp", "Lucha", 360, 360, 130, 80),
+    new Pokemon("Snorlax", "Normal", 500, 500, 110, 110)
+];
 
-const pokemon1 = new Pokemon("Charizard", "Fuego", 400, 400, 84,78);
-const movimiento_aleatorio_pk1 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
-const movimiento_aleatorio_pk2 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
-pokemon1.addMovimiento(movimiento_aleatorio_pk1);
-pokemon1.addMovimiento(movimiento_aleatorio_pk2);
+function creacionPokemon():Pokemon{
+    const pokemon1 = listaPokemon[Math.floor(Math.random()*listaPokemon.length)];
+    const movimiento_aleatorio_pk1 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
+    const movimiento_aleatorio_pk2 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
+    pokemon1.addMovimiento(movimiento_aleatorio_pk1);
+    pokemon1.addMovimiento(movimiento_aleatorio_pk2);
 
-const pokemon_bot = new Pokemon("Pikachu", "Electrico", 350, 350, 100,56);
+    return pokemon1;
+
+
+}
+
+
+/*
+const pokemon_bot = listaPokemon[Math.floor(Math.random()*listaPokemon.length)];
 const movimiento_aleatorio_bot = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
 const movimiento_aleatorio_bot2 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
 pokemon_bot.addMovimiento(movimiento_aleatorio_bot);
-pokemon_bot.addMovimiento(movimiento_aleatorio_bot2);
+pokemon_bot.addMovimiento(movimiento_aleatorio_bot2);*/
 
 function elegirOpc(): number {
     let incorrecto: boolean = true;
@@ -48,11 +68,11 @@ function elegirOpc(): number {
     return num; 
 }
 
-function flujoJuego(){
+function flujoJuego(pokemon1:Pokemon, pokemonbot:Pokemon){
     const opc = elegirOpc();
 
     if(opc==1){
-        pokemon1.attack(pokemon_bot);
+        pokemon1.attack(pokemonbot);
 
     }else if(opc==2){
         pokemon1.heal();
@@ -63,17 +83,18 @@ function flujoJuego(){
 
 }
 
-function fluejoJuegoBot():void{
+
+
+function flujoJuegoBot(pokemonbot: Pokemon, pokemon1: Pokemon): void {
     const opc = Math.floor(Math.random() * 2); 
-    
-    if(opc==1){
-        pokemon_bot.attack_bot(pokemon1);
 
-    }else if(opc==2){
-        pokemon_bot.heal();
-
+    if (opc == 1 && pokemonbot.getUsosHeal() > 0) { //Controlamos que si el bot ya ha usado el curarse no lo intente de nuevo
+                                                    //Esto si se le permite al jugador y le hace perder el turno
+        pokemonbot.heal_bot();
+        console.log(`${pokemonbot.getNombre()} se ha curado.`);
+    } else {
+        pokemonbot.attack_bot(pokemon1);
     }
-
 }
 
 function statsFinales(pokemon:Pokemon):void{
@@ -84,12 +105,16 @@ function statsFinales(pokemon:Pokemon):void{
 function comprobarFin(pokemon1:Pokemon, pokemon_bot:Pokemon){
 
     if(pokemon1.getHpActual()<=0){
-        console.log(`${pokemon1.getNombre()} HA GANADO EL COMBATE`);
+        console.log(`\n${pokemon1.getNombre()} HA GANADO EL COMBATE`);
         statsFinales(pokemon1);
+        statsFinales(pokemon_bot);
+
 
     }else if(pokemon_bot.getHpActual()<=0){
-        console.log(`${pokemon_bot.getNombre()} HA GANADO EL COMBATE`);
+        console.log(`\n${pokemon_bot.getNombre()} HA GANADO EL COMBATE`);
         statsFinales(pokemon_bot);
+        statsFinales(pokemon1);
+
 
 
 
@@ -102,18 +127,21 @@ function main_game(){
     console.log("COMIENZA EL COMBATE")
     let turnos = 1;
 
-    while(pokemon1.getHpActual()>0 && pokemon_bot.getHpActual()>0){
+    const pokemon1=creacionPokemon();
+    const pokemonBot=creacionPokemon();
+
+    while(pokemon1.getHpActual()>0 && pokemonBot.getHpActual()>0){
         console.log(`\nTURNO ${turnos}`)
         console.log("---------------------------")
     
         pokemon1.toString();
-        pokemon_bot.toString();
+        pokemonBot.toString();
     
-        flujoJuego();
-        fluejoJuegoBot();
+        flujoJuego(pokemon1, pokemonBot);
+        flujoJuegoBot(pokemonBot, pokemon1);
         turnos++;
     
-        comprobarFin(pokemon1, pokemon_bot);
+        comprobarFin(pokemon1, pokemonBot);
     
         
     

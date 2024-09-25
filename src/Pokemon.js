@@ -6,12 +6,14 @@ var Move_1 = require("./Move");
 var Pokemon = /** @class */ (function () {
     function Pokemon(nombre, tipo, hp_actual, hp_max, ataque, defensa) {
         this.lista_movimientos = [];
+        this.usos_heal = 0;
         this.nombre = nombre;
         this.tipo = tipo;
         this.hp_actual = hp_actual;
         this.hp_max = hp_max;
         this.ataque = ataque;
         this.defensa = defensa;
+        this.usos_heal = this.usos_heal;
     }
     Pokemon.prototype.addMovimiento = function (movimiento) {
         this.lista_movimientos.push(movimiento);
@@ -27,7 +29,7 @@ var Pokemon = /** @class */ (function () {
         var movimientoSeleccionado = new Move_1.Move("", 0);
         while (incorrecto) {
             this.mostrarAtaques();
-            var seleccion = parseInt(readlineSync.question('Elige el número del ataque: '));
+            var seleccion = parseInt(readlineSync.question('Elige el numero del ataque: '));
             if (seleccion >= 1 && seleccion <= this.lista_movimientos.length) {
                 movimientoSeleccionado = this.lista_movimientos[seleccion - 1];
                 incorrecto = false;
@@ -38,30 +40,65 @@ var Pokemon = /** @class */ (function () {
         }
         return movimientoSeleccionado;
     };
+    Pokemon.prototype.fallarAtaque = function () {
+        var probabilidad_fallo = Math.random() * 100;
+        return probabilidad_fallo; //Retorna true si el ataque falla
+    };
     Pokemon.prototype.attack = function (pokemon) {
+        var posibilidadFallo = this.fallarAtaque();
         var movimiento_elegido = this.elegirAtaque();
-        console.log("".concat(this.nombre, " usa ").concat(movimiento_elegido.getNombreMovimiento(), " | ").concat(movimiento_elegido.getDamage(), ")"));
-        var randomFactor = Math.random() * (1.0 - 0.85) + 0.85;
-        var damage = (this.ataque / this.defensa) * movimiento_elegido.getDamage() * randomFactor;
-        var hp_update = Math.round(pokemon.getHpActual() - damage);
-        pokemon.setHpActual(hp_update);
+        if (posibilidadFallo >= 20) {
+            console.log("".concat(this.nombre, " usa ").concat(movimiento_elegido.getNombreMovimiento(), " | ").concat(movimiento_elegido.getDamage()));
+            var randomFactor = Math.random() * (1.0 - 0.85) + 0.85;
+            var damage = (this.ataque / this.defensa) * movimiento_elegido.getDamage() * randomFactor;
+            var hp_update = Math.round(pokemon.getHpActual() - damage);
+            if (pokemon.getHpActual() <= 0) {
+                pokemon.setHpActual(0);
+            }
+            pokemon.setHpActual(hp_update);
+        }
+        else {
+            console.log("El ataque ha fallado!");
+        }
     };
     Pokemon.prototype.attack_bot = function (pokemon) {
+        var posibilidadFallo = this.fallarAtaque();
         var movimiento_aleatorio = this.lista_movimientos[Math.floor(Math.random() * this.lista_movimientos.length)];
-        console.log("".concat(this.nombre, " usa ").concat(movimiento_aleatorio.getNombreMovimiento(), " (Da\u00F1o: ").concat(movimiento_aleatorio.getDamage(), ")"));
-        var randomFactor = Math.random() * (1.0 - 0.85) + 0.85;
-        var damage = (this.ataque / this.defensa) * movimiento_aleatorio.getDamage() * randomFactor;
-        var hp_update = Math.round(pokemon.getHpActual() - damage);
-        pokemon.setHpActual(hp_update);
+        if (posibilidadFallo >= 20) {
+            console.log("".concat(this.nombre, " usa ").concat(movimiento_aleatorio.getNombreMovimiento(), " | ").concat(movimiento_aleatorio.getDamage()));
+            var randomFactor = Math.random() * (1.0 - 0.85) + 0.85;
+            var damage = (this.ataque / this.defensa) * movimiento_aleatorio.getDamage() * randomFactor;
+            var hp_update = Math.round(pokemon.getHpActual() - damage);
+            if (pokemon.getHpActual() <= 0) {
+                pokemon.setHpActual(0);
+            }
+            pokemon.setHpActual(hp_update);
+        }
+        else {
+            console.log("El ataque ha fallado!");
+        }
     };
     Pokemon.prototype.heal = function () {
-        if (Pokemon.usos_heal < 1) {
+        if (this.usos_heal < 1) {
             this.hp_actual = this.hp_actual + (this.hp_max / 2);
             console.log("Saluda aumentada en un 50%! (".concat(this.hp_actual / 2, ") "));
             if (this.hp_actual > this.hp_max) {
                 this.hp_actual = this.hp_max;
             }
-            Pokemon.usos_heal++;
+            this.usos_heal++;
+        }
+        else {
+            console.log("Ya has usado heal una vez. No se puede usar más! ");
+        }
+    };
+    Pokemon.prototype.heal_bot = function () {
+        if (this.usos_heal < 1) {
+            this.hp_actual = this.hp_actual + (this.hp_max / 2);
+            console.log("Saluda aumentada en un 50%! (".concat(this.hp_actual / 2, ") "));
+            if (this.hp_actual > this.hp_max) {
+                this.hp_actual = this.hp_max;
+            }
+            this.usos_heal++;
         }
         else {
             console.log("Ya has usado heal una vez. No se puede usar más! ");
@@ -106,10 +143,15 @@ var Pokemon = /** @class */ (function () {
     Pokemon.prototype.getDefensa = function () {
         return this.defensa;
     };
+    Pokemon.prototype.getUsosHeal = function () {
+        return this.usos_heal;
+    };
+    Pokemon.prototype.setUsosHeal = function (usos_heal) {
+        this.usos_heal = usos_heal;
+    };
     Pokemon.prototype.toString = function () {
         console.log("Nombre: ".concat(this.nombre, " | Tipo: ").concat(this.tipo, " | HP Actual: ").concat(this.hp_actual, " | HP Max: ").concat(this.hp_max, " | Ataque: ").concat(this.ataque, " | Defensa: ").concat(this.defensa, " | "));
     };
-    Pokemon.usos_heal = 0;
     return Pokemon;
 }());
 exports.Pokemon = Pokemon;

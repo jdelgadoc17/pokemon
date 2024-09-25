@@ -15,16 +15,32 @@ var lista_movimientos = [
     new Move_1.Move("Cuchillada", 70),
     new Move_1.Move("Puño Fuego", 82),
 ];
-var pokemon1 = new Pokemon_1.Pokemon("Charizard", "Fuego", 400, 400, 84, 78);
-var movimiento_aleatorio_pk1 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
-var movimiento_aleatorio_pk2 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
-pokemon1.addMovimiento(movimiento_aleatorio_pk1);
-pokemon1.addMovimiento(movimiento_aleatorio_pk2);
-var pokemon_bot = new Pokemon_1.Pokemon("Pikachu", "Electrico", 350, 350, 100, 56);
-var movimiento_aleatorio_bot = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
-var movimiento_aleatorio_bot2 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
+var listaPokemon = [
+    new Pokemon_1.Pokemon("Pikachu", "Electrico", 350, 350, 100, 56),
+    new Pokemon_1.Pokemon("Charizard", "Fuego", 400, 400, 84, 78),
+    new Pokemon_1.Pokemon("Bulbasaur", "Planta", 300, 300, 49, 49),
+    new Pokemon_1.Pokemon("Squirtle", "Agua", 320, 320, 48, 65),
+    new Pokemon_1.Pokemon("Jigglypuff", "Normal", 270, 270, 45, 20),
+    new Pokemon_1.Pokemon("Gengar", "Fantasma", 290, 290, 65, 60),
+    new Pokemon_1.Pokemon("Mewtwo", "Psíquico", 450, 450, 110, 90),
+    new Pokemon_1.Pokemon("Gardevoir", "Psíquico", 340, 340, 65, 65),
+    new Pokemon_1.Pokemon("Machamp", "Lucha", 360, 360, 130, 80),
+    new Pokemon_1.Pokemon("Snorlax", "Normal", 500, 500, 110, 110)
+];
+function creacionPokemon() {
+    var pokemon1 = listaPokemon[Math.floor(Math.random() * listaPokemon.length)];
+    var movimiento_aleatorio_pk1 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
+    var movimiento_aleatorio_pk2 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
+    pokemon1.addMovimiento(movimiento_aleatorio_pk1);
+    pokemon1.addMovimiento(movimiento_aleatorio_pk2);
+    return pokemon1;
+}
+/*
+const pokemon_bot = listaPokemon[Math.floor(Math.random()*listaPokemon.length)];
+const movimiento_aleatorio_bot = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
+const movimiento_aleatorio_bot2 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
 pokemon_bot.addMovimiento(movimiento_aleatorio_bot);
-pokemon_bot.addMovimiento(movimiento_aleatorio_bot2);
+pokemon_bot.addMovimiento(movimiento_aleatorio_bot2);*/
 function elegirOpc() {
     var incorrecto = true;
     var num = 0;
@@ -39,10 +55,10 @@ function elegirOpc() {
     }
     return num;
 }
-function flujoJuego() {
+function flujoJuego(pokemon1, pokemonbot) {
     var opc = elegirOpc();
     if (opc == 1) {
-        pokemon1.attack(pokemon_bot);
+        pokemon1.attack(pokemonbot);
     }
     else if (opc == 2) {
         pokemon1.heal();
@@ -51,13 +67,15 @@ function flujoJuego() {
         console.log("Debes elegir una opcion valida");
     }
 }
-function fluejoJuegoBot() {
+function flujoJuegoBot(pokemonbot, pokemon1) {
     var opc = Math.floor(Math.random() * 2);
-    if (opc == 1) {
-        pokemon_bot.attack_bot(pokemon1);
+    if (opc == 1 && pokemonbot.getUsosHeal() > 0) { //Controlamos que si el bot ya ha usado el curarse no lo intente de nuevo
+        //Esto si se le permite al jugador y le hace perder el turno
+        pokemonbot.heal_bot();
+        console.log("".concat(pokemonbot.getNombre(), " se ha curado."));
     }
-    else if (opc == 2) {
-        pokemon_bot.heal();
+    else {
+        pokemonbot.attack_bot(pokemon1);
     }
 }
 function statsFinales(pokemon) {
@@ -65,26 +83,30 @@ function statsFinales(pokemon) {
 }
 function comprobarFin(pokemon1, pokemon_bot) {
     if (pokemon1.getHpActual() <= 0) {
-        console.log("".concat(pokemon1.getNombre(), " HA GANADO EL COMBATE"));
+        console.log("\n".concat(pokemon1.getNombre(), " HA GANADO EL COMBATE"));
         statsFinales(pokemon1);
+        statsFinales(pokemon_bot);
     }
     else if (pokemon_bot.getHpActual() <= 0) {
-        console.log("".concat(pokemon_bot.getNombre(), " HA GANADO EL COMBATE"));
+        console.log("\n".concat(pokemon_bot.getNombre(), " HA GANADO EL COMBATE"));
         statsFinales(pokemon_bot);
+        statsFinales(pokemon1);
     }
 }
 function main_game() {
     console.log("COMIENZA EL COMBATE");
     var turnos = 1;
-    while (pokemon1.getHpActual() > 0 && pokemon_bot.getHpActual() > 0) {
+    var pokemon1 = creacionPokemon();
+    var pokemonBot = creacionPokemon();
+    while (pokemon1.getHpActual() > 0 && pokemonBot.getHpActual() > 0) {
         console.log("\nTURNO ".concat(turnos));
         console.log("---------------------------");
         pokemon1.toString();
-        pokemon_bot.toString();
-        flujoJuego();
-        fluejoJuegoBot();
+        pokemonBot.toString();
+        flujoJuego(pokemon1, pokemonBot);
+        flujoJuegoBot(pokemonBot, pokemon1);
         turnos++;
-        comprobarFin(pokemon1, pokemon_bot);
+        comprobarFin(pokemon1, pokemonBot);
     }
 }
 //JUGAMOS

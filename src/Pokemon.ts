@@ -10,8 +10,8 @@ export class Pokemon{
     private ataque:number;
     private defensa:number;
     private lista_movimientos:Move[]=[];
+    private usos_heal:number=0;
 
-    private static usos_heal:number=0;
 
     constructor(nombre:string, tipo:string, hp_actual:number, hp_max:number, ataque:number, defensa:number){
         this.nombre=nombre;
@@ -20,6 +20,7 @@ export class Pokemon{
         this.hp_max=hp_max;
         this.ataque=ataque;
         this.defensa=defensa;
+        this.usos_heal=this.usos_heal;
     }
 
     public addMovimiento(movimiento:Move):void{
@@ -41,7 +42,7 @@ export class Pokemon{
             this.mostrarAtaques();
             
     
-            const seleccion = parseInt(readlineSync.question('Elige el número del ataque: '));
+            const seleccion = parseInt(readlineSync.question('Elige el numero del ataque: '));
     
             if (seleccion >= 1 && seleccion <= this.lista_movimientos.length) {
                 movimientoSeleccionado = this.lista_movimientos[seleccion - 1];
@@ -53,30 +54,60 @@ export class Pokemon{
         
         return movimientoSeleccionado; 
     }
+
+    public fallarAtaque(): number {
+        const probabilidad_fallo = Math.random() * 100;
+    
+        return probabilidad_fallo; //Retorna true si el ataque falla
+    }
     
 
     public attack(pokemon:Pokemon):void{
-        const movimiento_elegido=this.elegirAtaque()
+        const posibilidadFallo =this.fallarAtaque(); 
+        const movimiento_elegido=this.elegirAtaque();
 
-        console.log(`${this.nombre} usa ${movimiento_elegido.getNombreMovimiento()} | ${movimiento_elegido.getDamage()})`)
-        const randomFactor: number = Math.random() * (1.0 - 0.85) + 0.85;
 
-        const damage = (this.ataque/this.defensa)*movimiento_elegido.getDamage()*randomFactor;
-        const hp_update=Math.round(pokemon.getHpActual() - damage);
-        pokemon.setHpActual(hp_update);
+        if(posibilidadFallo>=20){
+            console.log(`${this.nombre} usa ${movimiento_elegido.getNombreMovimiento()} | ${movimiento_elegido.getDamage()}`)
+            const randomFactor: number = Math.random() * (1.0 - 0.85) + 0.85;
+    
+            const damage = (this.ataque/this.defensa)*movimiento_elegido.getDamage()*randomFactor;
+            const hp_update=Math.round(pokemon.getHpActual() - damage);
+            if (pokemon.getHpActual() <= 0) {
+                pokemon.setHpActual(0);
+            }
+            pokemon.setHpActual(hp_update);
+
+            
+        }else{
+            console.log("El ataque ha fallado!")
+        }
+
+       
 
     }
 
     public attack_bot(pokemon:Pokemon):void{
-
+        const posibilidadFallo =this.fallarAtaque(); 
         const movimiento_aleatorio=this.lista_movimientos[Math.floor(Math.random()*this.lista_movimientos.length)];
-        console.log(`${this.nombre} usa ${movimiento_aleatorio.getNombreMovimiento()} | ${movimiento_aleatorio.getDamage()})`)
-        const randomFactor: number = Math.random() * (1.0 - 0.85) + 0.85;
+        if(posibilidadFallo>=20){
+            console.log(`${this.nombre} usa ${movimiento_aleatorio.getNombreMovimiento()} | ${movimiento_aleatorio.getDamage()}`)
+            const randomFactor: number = Math.random() * (1.0 - 0.85) + 0.85;
 
 
-        const damage = (this.ataque/this.defensa)*movimiento_aleatorio.getDamage()*randomFactor;
-        const hp_update=Math.round(pokemon.getHpActual() - damage);
-        pokemon.setHpActual(hp_update);
+            const damage = (this.ataque/this.defensa)*movimiento_aleatorio.getDamage()*randomFactor;
+            const hp_update=Math.round(pokemon.getHpActual() - damage);
+            if (pokemon.getHpActual() <= 0) {
+                pokemon.setHpActual(0);
+            }
+            pokemon.setHpActual(hp_update);
+
+        }else{
+            console.log("El ataque ha fallado!")
+
+        }
+
+        
 
     }
 
@@ -85,7 +116,7 @@ export class Pokemon{
 
     public heal():void{
         
-        if(Pokemon.usos_heal<1){
+        if(this.usos_heal<1){
             this.hp_actual=this.hp_actual+(this.hp_max/2);
             console.log(`Saluda aumentada en un 50%! (${this.hp_actual/2}) `);
 
@@ -93,13 +124,30 @@ export class Pokemon{
                 this.hp_actual=this.hp_max;
 
             }
-            Pokemon.usos_heal++;
+            this.usos_heal++;
             
 
         }else{
             console.log("Ya has usado heal una vez. No se puede usar más! ")
         }
 
+    }
+
+    public heal_bot(){
+        if(this.usos_heal<1){
+            this.hp_actual=this.hp_actual+(this.hp_max/2);
+            console.log(`Saluda aumentada en un 50%! (${this.hp_actual/2}) `);
+
+            if(this.hp_actual>this.hp_max){
+                this.hp_actual=this.hp_max;
+
+            }
+            this.usos_heal++;
+            
+
+        }else{
+            console.log("Ya has usado heal una vez. No se puede usar más! ")
+        }
     }
 
     public getListaMovimientos(){
@@ -155,6 +203,15 @@ export class Pokemon{
     public getDefensa(){
         return this.defensa;
     }
+
+    public getUsosHeal(){
+        return this.usos_heal;
+    }
+
+    public setUsosHeal(usos_heal:number){
+        this.usos_heal=usos_heal;
+    }
+
 
     public toString():void{
         console.log(`Nombre: ${this.nombre} | Tipo: ${this.tipo} | HP Actual: ${this.hp_actual} | HP Max: ${this.hp_max} | Ataque: ${this.ataque} | Defensa: ${this.defensa} | `)
