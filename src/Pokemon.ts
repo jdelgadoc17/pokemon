@@ -1,9 +1,6 @@
-//Nombre, tipo, HP actual, HP máximo (hpMax), ataque, defensa, y una lista de movimientos (Move).
-
+import * as readlineSync from 'readline-sync';
 import { Move } from "./Move";
 
-//Método attack(): Permite al Pokémon atacar seleccionando un movimiento de su lista y calculando el daño infligido.
-//Método heal(): Cura al Pokémon un 50% de su HP máximo, y solo puede usarse una vez por combate.
 export class Pokemon{
 
     private nombre:string;
@@ -29,10 +26,51 @@ export class Pokemon{
         this.lista_movimientos.push(movimiento);
     }
 
+    public mostrarAtaques(): void {
+        console.log("Ataques disponibles:");
+        for (let i=0; i< this.lista_movimientos.length; i++) {
+            console.log(`${i + 1}: ${this.lista_movimientos[i].toString()}`); 
+        }
+    }
+
+    public elegirAtaque() :Move{
+        let incorrecto: boolean = true;
+        let movimientoSeleccionado: Move = new Move("", 0); 
+    
+        while (incorrecto) {
+            this.mostrarAtaques();
+            
+    
+            const seleccion = parseInt(readlineSync.question('Elige el número del ataque: '));
+    
+            if (seleccion >= 1 && seleccion <= this.lista_movimientos.length) {
+                movimientoSeleccionado = this.lista_movimientos[seleccion - 1];
+                incorrecto = false;
+            } else {
+                console.log("Opción inválida, elige un número válido.");
+            }
+        }
+        
+        return movimientoSeleccionado; 
+    }
+    
+
     public attack(pokemon:Pokemon):void{
+        const movimiento_elegido=this.elegirAtaque()
+
+        console.log(`${this.nombre} usa ${movimiento_elegido.getNombreMovimiento()} | ${movimiento_elegido.getDamage()})`)
+        const randomFactor: number = Math.random() * (1.0 - 0.85) + 0.85;
+
+        const damage = (this.ataque/this.defensa)*movimiento_elegido.getDamage()*randomFactor;
+        const hp_update=Math.round(pokemon.getHpActual() - damage);
+        pokemon.setHpActual(hp_update);
+
+    }
+
+    public attack_bot(pokemon:Pokemon):void{
 
         const movimiento_aleatorio=this.lista_movimientos[Math.floor(Math.random()*this.lista_movimientos.length)];
-        console.log(`${this.nombre} usa ${movimiento_aleatorio.getNombreMovimiento()} (Daño: ${movimiento_aleatorio.getDamage()})`)
+        console.log(`${this.nombre} usa ${movimiento_aleatorio.getNombreMovimiento()} | ${movimiento_aleatorio.getDamage()})`)
         const randomFactor: number = Math.random() * (1.0 - 0.85) + 0.85;
 
 

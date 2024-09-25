@@ -1,9 +1,8 @@
 "use strict";
-//Nombre, tipo, HP actual, HP máximo (hpMax), ataque, defensa, y una lista de movimientos (Move).
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pokemon = void 0;
-//Método attack(): Permite al Pokémon atacar seleccionando un movimiento de su lista y calculando el daño infligido.
-//Método heal(): Cura al Pokémon un 50% de su HP máximo, y solo puede usarse una vez por combate.
+var readlineSync = require("readline-sync");
+var Move_1 = require("./Move");
 var Pokemon = /** @class */ (function () {
     function Pokemon(nombre, tipo, hp_actual, hp_max, ataque, defensa) {
         this.lista_movimientos = [];
@@ -17,7 +16,37 @@ var Pokemon = /** @class */ (function () {
     Pokemon.prototype.addMovimiento = function (movimiento) {
         this.lista_movimientos.push(movimiento);
     };
+    Pokemon.prototype.mostrarAtaques = function () {
+        console.log("Ataques disponibles:");
+        for (var i = 0; i < this.lista_movimientos.length; i++) {
+            console.log("".concat(i + 1, ": ").concat(this.lista_movimientos[i].toString()));
+        }
+    };
+    Pokemon.prototype.elegirAtaque = function () {
+        var incorrecto = true;
+        var movimientoSeleccionado = new Move_1.Move("", 0);
+        while (incorrecto) {
+            this.mostrarAtaques();
+            var seleccion = parseInt(readlineSync.question('Elige el número del ataque: '));
+            if (seleccion >= 1 && seleccion <= this.lista_movimientos.length) {
+                movimientoSeleccionado = this.lista_movimientos[seleccion - 1];
+                incorrecto = false;
+            }
+            else {
+                console.log("Opción inválida, elige un número válido.");
+            }
+        }
+        return movimientoSeleccionado;
+    };
     Pokemon.prototype.attack = function (pokemon) {
+        var movimiento_elegido = this.elegirAtaque();
+        console.log("".concat(this.nombre, " usa ").concat(movimiento_elegido.getNombreMovimiento(), " | ").concat(movimiento_elegido.getDamage(), ")"));
+        var randomFactor = Math.random() * (1.0 - 0.85) + 0.85;
+        var damage = (this.ataque / this.defensa) * movimiento_elegido.getDamage() * randomFactor;
+        var hp_update = Math.round(pokemon.getHpActual() - damage);
+        pokemon.setHpActual(hp_update);
+    };
+    Pokemon.prototype.attack_bot = function (pokemon) {
         var movimiento_aleatorio = this.lista_movimientos[Math.floor(Math.random() * this.lista_movimientos.length)];
         console.log("".concat(this.nombre, " usa ").concat(movimiento_aleatorio.getNombreMovimiento(), " (Da\u00F1o: ").concat(movimiento_aleatorio.getDamage(), ")"));
         var randomFactor = Math.random() * (1.0 - 0.85) + 0.85;

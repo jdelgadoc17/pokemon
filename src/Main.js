@@ -4,16 +4,16 @@ var readlineSync = require("readline-sync");
 var Move_1 = require("./Move");
 var Pokemon_1 = require("./Pokemon");
 var lista_movimientos = [
-    new Move_1.Move("Impactrueno", 40),
-    new Move_1.Move("Placaje", 50),
-    new Move_1.Move("Rayo", 90),
-    new Move_1.Move("Llamarada", 110),
+    new Move_1.Move("Impactrueno", 20),
+    new Move_1.Move("Placaje", 40),
+    new Move_1.Move("Rayo", 70),
+    new Move_1.Move("Llamarada", 125),
     new Move_1.Move("Hidrobomba", 110),
     new Move_1.Move("Terremoto", 100),
     new Move_1.Move("Gigadrenado", 75),
-    new Move_1.Move("Psíquico", 90),
+    new Move_1.Move("Psíquico", 50),
     new Move_1.Move("Cuchillada", 70),
-    new Move_1.Move("Puño Fuego", 75),
+    new Move_1.Move("Puño Fuego", 82),
 ];
 var pokemon1 = new Pokemon_1.Pokemon("Charizard", "Fuego", 400, 400, 84, 78);
 var movimiento_aleatorio_pk1 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
@@ -54,7 +54,7 @@ function flujoJuego() {
 function fluejoJuegoBot() {
     var opc = Math.floor(Math.random() * 2);
     if (opc == 1) {
-        pokemon_bot.attack(pokemon1);
+        pokemon_bot.attack_bot(pokemon1);
     }
     else if (opc == 2) {
         pokemon_bot.heal();
@@ -73,12 +73,19 @@ function comprobarFin(pokemon1, pokemon_bot) {
         statsFinales(pokemon_bot);
     }
 }
-while (pokemon1.getHpActual() > 0 && pokemon_bot.getHpActual() > 0) {
+function main_game() {
     console.log("COMIENZA EL COMBATE");
-    console.log("---------------------------");
-    pokemon1.toString();
-    pokemon_bot.toString();
-    flujoJuego();
-    fluejoJuegoBot();
-    comprobarFin(pokemon1, pokemon_bot);
+    var turnos = 1;
+    while (pokemon1.getHpActual() > 0 && pokemon_bot.getHpActual() > 0) {
+        console.log("\nTURNO ".concat(turnos));
+        console.log("---------------------------");
+        pokemon1.toString();
+        pokemon_bot.toString();
+        flujoJuego();
+        fluejoJuegoBot();
+        turnos++;
+        comprobarFin(pokemon1, pokemon_bot);
+    }
 }
+//JUGAMOS
+main_game();

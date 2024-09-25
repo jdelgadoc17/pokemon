@@ -29,6 +29,10 @@ export class Move{
             return this.damage;
         }
 
+        public toString(): string {
+            return `Nombre del movimiento: ${this.nombre_movimiento} | Daño base: ${this.damage}`;
+        }
+
 
 
 }

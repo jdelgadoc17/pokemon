@@ -6,16 +6,16 @@ import { Pokemon } from "./Pokemon";
 
 
 const lista_movimientos: Move[] = [
-    new Move("Impactrueno", 40),
-    new Move("Placaje", 50),
-    new Move("Rayo", 90),
-    new Move("Llamarada", 110),
+    new Move("Impactrueno", 20),
+    new Move("Placaje", 40),
+    new Move("Rayo", 70),
+    new Move("Llamarada", 125),
     new Move("Hidrobomba", 110),
     new Move("Terremoto", 100),
     new Move("Gigadrenado", 75),
-    new Move("Psíquico", 90),
+    new Move("Psíquico", 50),
     new Move("Cuchillada", 70),
-    new Move("Puño Fuego", 75),
+    new Move("Puño Fuego", 82),
 ];
 
 
@@ -67,7 +67,7 @@ function fluejoJuegoBot():void{
     const opc = Math.floor(Math.random() * 2); 
     
     if(opc==1){
-        pokemon_bot.attack(pokemon1);
+        pokemon_bot.attack_bot(pokemon1);
 
     }else if(opc==2){
         pokemon_bot.heal();
@@ -98,19 +98,33 @@ function comprobarFin(pokemon1:Pokemon, pokemon_bot:Pokemon){
 }
 
 
-
-while(pokemon1.getHpActual()>0 && pokemon_bot.getHpActual()>0){
+function main_game(){
     console.log("COMIENZA EL COMBATE")
-    console.log("---------------------------")
+    let turnos = 1;
 
-    pokemon1.toString();
-    pokemon_bot.toString();
-
-    flujoJuego();
-    fluejoJuegoBot();
-
-    comprobarFin(pokemon1, pokemon_bot);
-
+    while(pokemon1.getHpActual()>0 && pokemon_bot.getHpActual()>0){
+        console.log(`\nTURNO ${turnos}`)
+        console.log("---------------------------")
     
+        pokemon1.toString();
+        pokemon_bot.toString();
+    
+        flujoJuego();
+        fluejoJuegoBot();
+        turnos++;
+    
+        comprobarFin(pokemon1, pokemon_bot);
+    
+        
+    
+    }
 
 }
+
+
+//JUGAMOS
+
+main_game();
+
+
+

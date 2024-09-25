@@ -19,6 +19,9 @@ var Move = /** @class */ (function () {
     Move.prototype.getDamage = function () {
         return this.damage;
     };
+    Move.prototype.toString = function () {
+        return "Nombre del movimiento: ".concat(this.nombre_movimiento, " | Da\u00F1o base: ").concat(this.damage);
+    };
     return Move;
 }());
 exports.Move = Move;
