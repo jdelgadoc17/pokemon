@@ -152,6 +152,9 @@ var Pokemon = /** @class */ (function () {
     Pokemon.prototype.toString = function () {
         console.log("Nombre: ".concat(this.nombre, " | Tipo: ").concat(this.tipo, " | HP Actual: ").concat(this.hp_actual, " | HP Max: ").concat(this.hp_max, " | Ataque: ").concat(this.ataque, " | Defensa: ").concat(this.defensa, " | "));
     };
+    Pokemon.prototype.toStringResumen = function () {
+        console.log("Nombre: ".concat(this.nombre, " | HP Actual: ").concat(this.hp_actual));
+    };
     return Pokemon;
 }());
 exports.Pokemon = Pokemon;

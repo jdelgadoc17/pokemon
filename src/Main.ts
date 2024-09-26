@@ -40,16 +40,9 @@ function creacionPokemon():Pokemon{
 
     return pokemon1;
 
-
 }
 
 
-/*
-const pokemon_bot = listaPokemon[Math.floor(Math.random()*listaPokemon.length)];
-const movimiento_aleatorio_bot = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
-const movimiento_aleatorio_bot2 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
-pokemon_bot.addMovimiento(movimiento_aleatorio_bot);
-pokemon_bot.addMovimiento(movimiento_aleatorio_bot2);*/
 
 function elegirOpc(): number {
     let incorrecto: boolean = true;
@@ -69,6 +62,7 @@ function elegirOpc(): number {
 }
 
 function flujoJuego(pokemon1:Pokemon, pokemonbot:Pokemon){
+    console.log(`\n`);
     const opc = elegirOpc();
 
     if(opc==1){
@@ -86,7 +80,8 @@ function flujoJuego(pokemon1:Pokemon, pokemonbot:Pokemon){
 
 
 function flujoJuegoBot(pokemonbot: Pokemon, pokemon1: Pokemon): void {
-    const opc = Math.floor(Math.random() * 2); 
+    console.log(`\n`);
+    const opc = Math.floor(Math.random() * 2);
 
     if (opc == 1 && pokemonbot.getUsosHeal() > 0) { //Controlamos que si el bot ya ha usado el curarse no lo intente de nuevo
                                                     //Esto si se le permite al jugador y le hace perder el turno
@@ -128,10 +123,16 @@ function main_game(){
 
     while(juegoencurso){
         console.log(`\nTURNO ${turnos}`)
-        console.log("---------------------------")
-    
-        pokemon1.toString();
-        pokemonBot.toString();
+        console.log("------------------------------------------------------")
+        
+        if(turnos==1){
+            pokemon1.toString();
+            pokemonBot.toString();
+        }else{
+            pokemon1.toStringResumen();
+            pokemonBot.toStringResumen();
+        }
+        
     
         flujoJuego(pokemon1, pokemonBot);
         flujoJuegoBot(pokemonBot, pokemon1);

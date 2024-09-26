@@ -80,7 +80,7 @@ export class Pokemon{
 
             
         }else{
-            console.log("El ataque ha fallado!")
+            console.log(`El ataque de ${this.nombre} ha fallado!`);
         }
 
        
@@ -103,7 +103,8 @@ export class Pokemon{
             pokemon.setHpActual(hp_update);
 
         }else{
-            console.log("El ataque ha fallado!")
+            console.log(`El ataque de ${this.nombre} ha fallado!`);
+
 
         }
 
@@ -215,6 +216,11 @@ export class Pokemon{
 
     public toString():void{
         console.log(`Nombre: ${this.nombre} | Tipo: ${this.tipo} | HP Actual: ${this.hp_actual} | HP Max: ${this.hp_max} | Ataque: ${this.ataque} | Defensa: ${this.defensa} | `)
+
+    }
+    
+    public toStringResumen():void{
+        console.log(`Nombre: ${this.nombre} | HP Actual: ${this.hp_actual}`)
 
     }
 

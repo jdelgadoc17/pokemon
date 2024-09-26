@@ -35,12 +35,6 @@ function creacionPokemon() {
     pokemon1.addMovimiento(movimiento_aleatorio_pk2);
     return pokemon1;
 }
-/*
-const pokemon_bot = listaPokemon[Math.floor(Math.random()*listaPokemon.length)];
-const movimiento_aleatorio_bot = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
-const movimiento_aleatorio_bot2 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
-pokemon_bot.addMovimiento(movimiento_aleatorio_bot);
-pokemon_bot.addMovimiento(movimiento_aleatorio_bot2);*/
 function elegirOpc() {
     var incorrecto = true;
     var num = 0;
@@ -56,6 +50,7 @@ function elegirOpc() {
     return num;
 }
 function flujoJuego(pokemon1, pokemonbot) {
+    console.log("\n");
     var opc = elegirOpc();
     if (opc == 1) {
         pokemon1.attack(pokemonbot);
@@ -68,6 +63,7 @@ function flujoJuego(pokemon1, pokemonbot) {
     }
 }
 function flujoJuegoBot(pokemonbot, pokemon1) {
+    console.log("\n");
     var opc = Math.floor(Math.random() * 2);
     if (opc == 1 && pokemonbot.getUsosHeal() > 0) { //Controlamos que si el bot ya ha usado el curarse no lo intente de nuevo
         //Esto si se le permite al jugador y le hace perder el turno
@@ -79,7 +75,7 @@ function flujoJuegoBot(pokemonbot, pokemon1) {
     }
 }
 function statsFinales(pokemon) {
-    console.log("".concat(pokemon.getNombre(), " | ").concat(pokemon.getHpActual()));
+    console.log("Nombre: ".concat(pokemon.getNombre(), " | Salud final: ").concat(pokemon.getHpActual()));
 }
 function comprobarFin(pokemon1, pokemon_bot) {
     if (pokemon1.getHpActual() <= 0) {
@@ -105,8 +101,14 @@ function main_game() {
     while (juegoencurso) {
         console.log("\nTURNO ".concat(turnos));
         console.log("---------------------------");
-        pokemon1.toString();
-        pokemonBot.toString();
+        if (turnos == 1) {
+            pokemon1.toString();
+            pokemonBot.toString();
+        }
+        else {
+            pokemon1.toStringResumen();
+            pokemonBot.toStringResumen();
+        }
         flujoJuego(pokemon1, pokemonBot);
         flujoJuegoBot(pokemonBot, pokemon1);
         turnos++;
