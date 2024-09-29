@@ -39,9 +39,7 @@ export class Pokemon{
         let movimientoSeleccionado: Move = new Move("", 0); 
     
         while (incorrecto) {
-            this.mostrarAtaques();
-            
-    
+            this.mostrarAtaques();    
             const seleccion = parseInt(readlineSync.question('Elige el numero del ataque: '));
     
             if (seleccion >= 1 && seleccion <= this.lista_movimientos.length) {
@@ -57,7 +55,6 @@ export class Pokemon{
 
     public fallarAtaque(): number {
         const probabilidad_fallo = Math.random() * 100;
-    
         return probabilidad_fallo; //Retorna true si el ataque falla
     }
     
@@ -82,9 +79,6 @@ export class Pokemon{
         }else{
             console.log(`El ataque de ${this.nombre} ha fallado!`);
         }
-
-       
-
     }
 
     public attack_bot(pokemon:Pokemon):void{
@@ -104,10 +98,8 @@ export class Pokemon{
 
         }else{
             console.log(`El ataque de ${this.nombre} ha fallado!`);
-
-
         }
-
+ 
         
 
     }

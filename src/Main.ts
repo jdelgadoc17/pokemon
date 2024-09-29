@@ -31,14 +31,28 @@ const listaPokemon: Pokemon[] = [
     new Pokemon("Snorlax", "Normal", 500, 500, 110, 110)
 ];
 
+function pintarInicio(){
+    const asciiArt = `
+__________       __                                           ________                          _________.__              .__          __                
+\\______   \\____ |  | __ ____   _____   ____   ____   ______  /  _____/_____    _____   ____    /   _____/|__| _____  __ __|  | _____ _/  |_  ___________ 
+ |     ___/  _ \\|  |/ // __ \\ /     \\ /  _ \\ /    \\ /  ___/ /   \\  ___\\__  \\  /     \\_/ __ \\   \\_____  \\ |  |/     \\|  |  \\  | \\__  \\\\   __\\/  _ \\_  __ \\
+ |    |  (  <_> )    <\\  ___/|  Y Y  (  <_> )   |  \\\\___ \\  \\    \\_\\  \\/ __ \\|  Y Y  \\  ___/   /        \\|  |  Y Y  \\  |  /  |__/ __ \\|  | (  <_> )  | \\/
+ |____|   \\____/|__|_ \\\\___  >__|_|  /\\____/|___|  /____  >  \\______  (____  /__|_|  /\\___  > /_______  /|__|__|_|  /____/|____(____  /__|  \\____/|__|   
+                     \\/    \\/      \\/            \\/     \\/          \\/     \\/      \\/     \\/          \\/          \\/                \\/                 
+`;
+
+console.log(asciiArt);
+
+}
+
 function creacionPokemon():Pokemon{
-    const pokemon1 = listaPokemon[Math.floor(Math.random()*listaPokemon.length)];
+    const pokemon = listaPokemon[Math.floor(Math.random()*listaPokemon.length)];
     const movimiento_aleatorio_pk1 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
     const movimiento_aleatorio_pk2 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
-    pokemon1.addMovimiento(movimiento_aleatorio_pk1);
-    pokemon1.addMovimiento(movimiento_aleatorio_pk2);
+    pokemon.addMovimiento(movimiento_aleatorio_pk1);
+    pokemon.addMovimiento(movimiento_aleatorio_pk2);
 
-    return pokemon1;
+    return pokemon;
 
 }
 
@@ -114,6 +128,7 @@ function comprobarFin(pokemon1: Pokemon, pokemon_bot: Pokemon): boolean {
 
 
 function main_game(){
+    pintarInicio();
     console.log("COMIENZA EL COMBATE")
     let turnos = 1;
 
@@ -138,7 +153,7 @@ function main_game(){
         flujoJuegoBot(pokemonBot, pokemon1);
         turnos++;
     
-        juegoencurso = !comprobarFin(pokemon1, pokemonBot);
+        juegoencurso = !comprobarFin(pokemon1, pokemonBot); //Comprobamos si la vida de algun jugador es cero para salir del WHILE
     
         
     

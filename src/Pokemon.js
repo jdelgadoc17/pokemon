@@ -58,7 +58,7 @@ var Pokemon = /** @class */ (function () {
             pokemon.setHpActual(hp_update);
         }
         else {
-            console.log("El ataque ha fallado!");
+            console.log("El ataque de ".concat(this.nombre, " ha fallado!"));
         }
     };
     Pokemon.prototype.attack_bot = function (pokemon) {
@@ -75,7 +75,7 @@ var Pokemon = /** @class */ (function () {
             pokemon.setHpActual(hp_update);
         }
         else {
-            console.log("El ataque ha fallado!");
+            console.log("El ataque de ".concat(this.nombre, " ha fallado!"));
         }
     };
     Pokemon.prototype.heal = function () {

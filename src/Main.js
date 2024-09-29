@@ -27,13 +27,17 @@ var listaPokemon = [
     new Pokemon_1.Pokemon("Machamp", "Lucha", 360, 360, 130, 80),
     new Pokemon_1.Pokemon("Snorlax", "Normal", 500, 500, 110, 110)
 ];
+function pintarInicio() {
+    var asciiArt = "\n__________       __                                           ________                          _________.__              .__          __                \n\\______   \\____ |  | __ ____   _____   ____   ____   ______  /  _____/_____    _____   ____    /   _____/|__| _____  __ __|  | _____ _/  |_  ___________ \n |     ___/  _ \\|  |/ // __ \\ /     \\ /  _ \\ /    \\ /  ___/ /   \\  ___\\__  \\  /     \\_/ __ \\   \\_____  \\ |  |/     \\|  |  \\  | \\__  \\\\   __\\/  _ \\_  __ \\\n |    |  (  <_> )    <\\  ___/|  Y Y  (  <_> )   |  \\\\___ \\  \\    \\_\\  \\/ __ \\|  Y Y  \\  ___/   /        \\|  |  Y Y  \\  |  /  |__/ __ \\|  | (  <_> )  | \\/\n |____|   \\____/|__|_ \\\\___  >__|_|  /\\____/|___|  /____  >  \\______  (____  /__|_|  /\\___  > /_______  /|__|__|_|  /____/|____(____  /__|  \\____/|__|   \n                     \\/    \\/      \\/            \\/     \\/          \\/     \\/      \\/     \\/          \\/          \\/                \\/                 \n";
+    console.log(asciiArt);
+}
 function creacionPokemon() {
-    var pokemon1 = listaPokemon[Math.floor(Math.random() * listaPokemon.length)];
+    var pokemon = listaPokemon[Math.floor(Math.random() * listaPokemon.length)];
     var movimiento_aleatorio_pk1 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
     var movimiento_aleatorio_pk2 = lista_movimientos[Math.floor(Math.random() * lista_movimientos.length)];
-    pokemon1.addMovimiento(movimiento_aleatorio_pk1);
-    pokemon1.addMovimiento(movimiento_aleatorio_pk2);
-    return pokemon1;
+    pokemon.addMovimiento(movimiento_aleatorio_pk1);
+    pokemon.addMovimiento(movimiento_aleatorio_pk2);
+    return pokemon;
 }
 function elegirOpc() {
     var incorrecto = true;
@@ -93,6 +97,7 @@ function comprobarFin(pokemon1, pokemon_bot) {
     return false;
 }
 function main_game() {
+    pintarInicio();
     console.log("COMIENZA EL COMBATE");
     var turnos = 1;
     var pokemon1 = creacionPokemon();
@@ -100,7 +105,7 @@ function main_game() {
     var juegoencurso = true;
     while (juegoencurso) {
         console.log("\nTURNO ".concat(turnos));
-        console.log("---------------------------");
+        console.log("------------------------------------------------------");
         if (turnos == 1) {
             pokemon1.toString();
             pokemonBot.toString();
@@ -112,7 +117,7 @@ function main_game() {
         flujoJuego(pokemon1, pokemonBot);
         flujoJuegoBot(pokemonBot, pokemon1);
         turnos++;
-        juegoencurso = !comprobarFin(pokemon1, pokemonBot);
+        juegoencurso = !comprobarFin(pokemon1, pokemonBot); //Comprobamos si la vida de algun jugador es cero para salir del WHILE
     }
 }
 //JUGAMOS
