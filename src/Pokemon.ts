@@ -68,11 +68,12 @@ export class Pokemon{
             console.log(`${this.nombre} usa ${movimiento_elegido.getNombreMovimiento()} | ${movimiento_elegido.getDamage()}`)
             const randomFactor: number = Math.random() * (1.0 - 0.85) + 0.85;
     
-            const damage = (this.ataque/this.defensa)*movimiento_elegido.getDamage()*randomFactor;
-            const hp_update=Math.round(pokemon.getHpActual() - damage);
-            if (pokemon.getHpActual() <= 0) {
-                pokemon.setHpActual(0);
+            const damage = (this.ataque / pokemon.getDefensa()) * movimiento_elegido.getDamage() * randomFactor;
+            let hp_update=Math.round(pokemon.getHpActual() - damage);
+            if (hp_update < 0) {
+                hp_update = 0;
             }
+            pokemon.setHpActual(hp_update);
             pokemon.setHpActual(hp_update);
 
             
@@ -90,9 +91,9 @@ export class Pokemon{
 
 
             const damage = (this.ataque/this.defensa)*movimiento_aleatorio.getDamage()*randomFactor;
-            const hp_update=Math.round(pokemon.getHpActual() - damage);
-            if (pokemon.getHpActual() <= 0) {
-                pokemon.setHpActual(0);
+            let hp_update=Math.round(pokemon.getHpActual() - damage);
+            if (hp_update < 0) {
+                hp_update = 0;
             }
             pokemon.setHpActual(hp_update);
 

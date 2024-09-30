@@ -50,11 +50,12 @@ var Pokemon = /** @class */ (function () {
         if (posibilidadFallo >= 20) {
             console.log("".concat(this.nombre, " usa ").concat(movimiento_elegido.getNombreMovimiento(), " | ").concat(movimiento_elegido.getDamage()));
             var randomFactor = Math.random() * (1.0 - 0.85) + 0.85;
-            var damage = (this.ataque / this.defensa) * movimiento_elegido.getDamage() * randomFactor;
+            var damage = (this.ataque / pokemon.getDefensa()) * movimiento_elegido.getDamage() * randomFactor;
             var hp_update = Math.round(pokemon.getHpActual() - damage);
-            if (pokemon.getHpActual() <= 0) {
-                pokemon.setHpActual(0);
+            if (hp_update < 0) {
+                hp_update = 0;
             }
+            pokemon.setHpActual(hp_update);
             pokemon.setHpActual(hp_update);
         }
         else {
@@ -69,8 +70,8 @@ var Pokemon = /** @class */ (function () {
             var randomFactor = Math.random() * (1.0 - 0.85) + 0.85;
             var damage = (this.ataque / this.defensa) * movimiento_aleatorio.getDamage() * randomFactor;
             var hp_update = Math.round(pokemon.getHpActual() - damage);
-            if (pokemon.getHpActual() <= 0) {
-                pokemon.setHpActual(0);
+            if (hp_update < 0) {
+                hp_update = 0;
             }
             pokemon.setHpActual(hp_update);
         }
